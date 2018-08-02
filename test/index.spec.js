@@ -46,8 +46,8 @@ test ('throws when specification handler is passed more than 1 argument as a tim
 	t.is (err.message, 'the specification handler: the specification handler ' +
 		'is a curried function, and as such only takes one argument. ' +
 		'Received two. The proper way to call the specification ' +
-		'handler: "fn(x)(y)", instead of ' +
-		'"fn(x, y)"');
+		'handler: "fn (x) (y)", instead of ' +
+		'"fn (x, y)"');
 });
 
 test ('caseOf.all returns all results', (t) => {
@@ -71,4 +71,12 @@ test ('only first matching case is run', (t) => {
 	t.is (side1, true);
 	t.is (side2, false);
 	t.is (side3, false);
+});
+
+test ('default case with otherwise', (t) => {
+	const res = caseof ((when) => {
+		when (x => x < 20) (x => x + 10);
+		when (caseof.otherwise) (() => 0);
+	}) (23);
+	t.is (res, 0);
 });

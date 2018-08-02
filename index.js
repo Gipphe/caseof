@@ -13,8 +13,8 @@ function assertIsNotPassedThrowWithDefaultMessage(x, name) {
 		throw new Error (name + ': ' + name + ' is a curried ' +
 			'function, and as such only takes one argument. ' +
 			'Received two. The proper way to call ' + name + ': ' +
-			'"fn(x)(y)", instead of ' +
-			'"fn(x, y)"');
+			'"fn (x) (y)", instead of ' +
+			'"fn (x, y)"');
 	}
 }
 
@@ -62,22 +62,45 @@ function lazyWhen(continuationFn) {
 	};
 }
 
+//# otherwise :: a -> Boolean
+//.
+//. Simply a function that always returns true. Will always be considered a
+//. "match", and its handler will always be executed if it is encountered.
+//. It is mainly useful as a `default` case.
+//.
+//. ```javascript
+//. > otherwise ()
+//. true
+//.
+//. > otherwise ('foo')
+//. true
+//.
+//. > caseOf ((when) => {
+//. .   when (x => x < 20) (x => x + 10)
+//. .   when (otherwise) (() => 0)
+//. . }) (23)
+//. 0
+//. ```
+function otherwise() {
+	return true;
+}
+
 //# caseOfAll :: ((a -> Boolean) -> (a -> b) -> Undefined) -> a -> Array b
 //.
 //. Returns the result of all matching cases' handlers. The order will be
 //. the same order as the specification handler was called.
 //.
 //. ```javascript
-//. > caseOf.all((when) => {
-//. .   when(x => typeof x === 'number')(x => x + 1)
-//. .   when(x => typeof x === 'number')(x => x - 0)
-//. . })(1)
+//. > caseOf.all ((when) => {
+//. .   when (x => typeof x === 'number') (x => x + 1)
+//. .   when (x => typeof x === 'number') (x => x - 0)
+//. . }) (1)
 //. [2, 0]
 //.
-//. > caseOf.all((when) => {
-//. .   when(x => x > 0)(x => x - 1)
-//. .   when(x => x < 0)(x => x + 1)
-//. . })(-4)
+//. > caseOf.all ((when) => {
+//. .   when (x => x > 0) (x => x - 1)
+//. .   when (x => x < 0) (x => x + 1)
+//. . }) (-4)
 //. [-3]
 //. ```
 function caseOfAll(specFn, x) {
@@ -99,38 +122,39 @@ function caseOfAll(specFn, x) {
 //. only the first matching handler is run.
 //.
 //. ```javascript
-//. > caseOf((when) => {
-//. .   when(x => x === 'foo')(x => x + 'bar')
-//. .   when(x => typeof x === 'string')(x => x.toUpperCase())
-//. . })('foo')
+//. > caseOf ((when) => {
+//. .   when (x => x === 'foo') (x => x + 'bar')
+//. .   when (x => typeof x === 'string') (x => x.toUpperCase ())
+//. . }) ('foo')
 //. 'foobar'
 //.
-//. let fn = caseOf((when) => {
-//. .   when(x => x % 15 === 0)(() => 'FizzBuzz')
-//. .   when(x => x % 3 === 0)(() => 'Fizz')
-//. .   when(x => x % 5 === 0)(() => 'Buzz')
-//. .   when(() => true)(x => x)
+//. > let fn = caseOf ((when) => {
+//. .   when (x => x % 15 === 0) (() => 'FizzBuzz')
+//. .   when (x => x % 3 === 0) (() => 'Fizz')
+//. .   when (x => x % 5 === 0) (() => 'Buzz')
+//. .   when (() => true) (x => x) // these two
+//. .   when (caseOf.otherwise) (x => x) // are equivalent
 //. . })
 //.
-//. > fn(1)
+//. > fn (1)
 //. 1
 //.
-//. > fn(3)
+//. > fn (3)
 //. 'Fizz'
 //.
-//. > fn(5)
+//. > fn (5)
 //. 'Buzz'
 //.
-//. > fn(15)
+//. > fn (15)
 //. 'FizzBuzz'
 //. ```
 //.
 //. This function throws an error if none of the cases match.
 //.
 //. ```javascript
-//. > caseOf((when) => {
-//. .   when(x => x === 'foo')(x => x + 'bar')
-//. . })('quack')
+//. > caseOf ((when) => {
+//. .   when (x => x === 'foo') (x => x + 'bar')
+//. . }) ('quack')
 //. ! Error: None of the cases matches the value
 //. ```
 function caseOf(specFn, x) {
@@ -149,5 +173,6 @@ function caseOf(specFn, x) {
 	};
 }
 caseOf.all = caseOfAll;
+caseOf.otherwise = otherwise;
 
 module.exports = caseOf;
