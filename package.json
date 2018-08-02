@@ -15,11 +15,15 @@
     "generateDocs": "transcribe --url 'https://github.com/Gipphe/caseof/blob/master/{filename}#L{line}' --insert-into README.md -- index.js",
     "lint": "eslint index.js test/index.spec.js",
     "test": "ava",
+    "coverage": "nyc yarn test",
+    "coverage:post": "yarn coverage && nyc report --reporter=text-lcov | coveralls",
     "release": "yarn lint && yarn test && yarn standard-version"
   },
   "devDependencies": {
     "ava": "^0.25.0",
+    "coveralls": "^3.0.2",
     "eslint": "^5.2.0",
+    "nyc": "^12.0.2",
     "prettier": "^1.14.0",
     "sanctuary-style": "^2.0.0",
     "standard-version": "^4.4.0",
