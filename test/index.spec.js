@@ -54,6 +54,7 @@ test ('caseOf.all returns all results', (t) => {
 	const res = caseof.all ((when) => {
 		when (x => x === 1) (x => x + 1);
 		when (x => x === 1) (x => x - 1);
+		when (x => typeof x !== 'number') (() => 'foo');
 	}) (1);
 	t.deepEqual (res, [2, 0]);
 });
