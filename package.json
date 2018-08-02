@@ -1,29 +1,29 @@
 {
-	"name": "caseof",
-	"version": "0.1.0",
-	"license": "MIT",
-	"author": "Victor Nascimento Bakke",
-	"homepage": "https://github.com/Gipphe/caseof",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/Gipphe/caseof.git"
-	},
-	"files": [
-		"index.js"
-	],
-	"scripts": {
-		"generateDocs": "transcribe --url 'https://github.com/Gipphe/caseof/blob/master/{filename}#L{line}' --insert-into README.md -- index.js",
-		"lint": "eslint index.js test/index.spec.js",
-		"test": "ava",
-		"release": "yarn lint && yarn test && yarn standard-version"
-	},
-	"devDependencies": {
-		"ava": "^0.25.0",
-		"eslint": "^5.2.0",
-		"prettier": "^1.14.0",
-		"sanctuary-style": "^2.0.0",
-		"standard-version": "^4.4.0",
-		"transcribe": "^1.1.1"
-	},
-	"dependencies": {}
+  "name": "caseof",
+  "version": "1.0.0",
+  "license": "MIT",
+  "author": "Victor Nascimento Bakke",
+  "homepage": "https://github.com/Gipphe/caseof",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Gipphe/caseof.git"
+  },
+  "files": [
+    "index.js"
+  ],
+  "scripts": {
+    "generateDocs": "transcribe --url 'https://github.com/Gipphe/caseof/blob/master/{filename}#L{line}' --insert-into README.md -- index.js",
+    "lint": "eslint index.js test/index.spec.js",
+    "test": "ava",
+    "release": "yarn lint && yarn test && yarn standard-version"
+  },
+  "devDependencies": {
+    "ava": "^0.25.0",
+    "eslint": "^5.2.0",
+    "prettier": "^1.14.0",
+    "sanctuary-style": "^2.0.0",
+    "standard-version": "^4.4.0",
+    "transcribe": "^1.1.1"
+  },
+  "dependencies": {}
 }
