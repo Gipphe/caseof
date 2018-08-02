@@ -219,6 +219,14 @@ yarn test
 
 to run unit tests.
 
+This project uses a slightly altered variant of
+[sanctuary-style](http://github.com/sanctuary-js/sanctuary-style). You can
+lint the project using
+
+```shell
+yarn lint
+```
+
 ## Compatibility
 
 This package is compatible all the way down to Node 4 and IE9. It might be
