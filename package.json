@@ -1,5 +1,6 @@
 {
   "name": "caseof",
+  "description": "Elm and Haskell-inspired case-of",
   "keywords": [
     "pattern-matching",
     "pattern",
