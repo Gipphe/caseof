@@ -8,6 +8,8 @@
 	// Common/Node/RequireJS, the module exports the caseof API and when
 	// executed as a simple <script>, it creates a caseof global instead.
 
+	/* istanbul ignore next */
+
 	// Montage Require
 	if (typeof bootstrap === 'function') {
 		/* global bootstrap: false */
