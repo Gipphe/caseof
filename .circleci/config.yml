@@ -1,83 +1,105 @@
-# Javascript Node CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-javascript/ for more details
-#
+anchors_:
+  working_dir: &working_dir
+    working_directory: ~/repo
+
+  pull_cache: &pull_cache
+    restore_cache:
+      keys:
+        - deps-{{ .Branch }}-{{ checksum "yarn.lock" }}-v1
+
+  push_cache: &push_cache
+    save_cache:
+      paths:
+        - node_modules
+      key: deps-{{ .Branch }}-{{ checksum "yarn.lock" }}-v1
+
+  install: &install
+    run: yarn install --frozen-lockfile
+
+  node8_image: &node8_image
+    docker:
+      - image: circleci/node:8.11.3
+
+  node10_image: &node10_image
+    docker:
+      - image: circleci/node:10.7.0
+
+  node6_image: &node6_image
+    docker:
+      - image: circleci/node:6.14.3
+
+  require_setup: &require_setup
+    requires:
+      - setup
+
 version: 2
 jobs:
-  node8:
-    docker:
-      - image: circleci/node:8
-    working_directory: ~/repo
+  setup:
+    <<: *node8_image
+    <<: *working_dir
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
-      - run: yarn install
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+      - <<: *pull_cache
+      - <<: *install
+      - <<: *push_cache
+          
+  node10:
+    <<: *node10_image
+    <<: *working_dir
+    steps:
+      - checkout
+      - <<: *pull_cache
+      - <<: *install
+      - run: yarn test
+
+  node8:
+    <<: *node8_image
+    <<: *working_dir
+    steps:
+      - checkout
+      - <<: *pull_cache
+      - <<: *install
       - run: yarn test
 
   node6:
-    docker:
-      - image: circleci/node:6
-    working_directory: ~/repo
+    <<: *node6_image
+    <<: *working_dir
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
-      - run: yarn install
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+      - <<: *pull_cache
+      - <<: *install
       - run: yarn test
 
   lint:
-    docker:
-      - image: circleci/node:8
-    working_directory: ~/repo
+    <<: *node8_image
+    <<: *working_dir
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
-      - run: yarn install
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+      - <<: *pull_cache
+      - <<: *install
       - run: yarn lint
       
   coveralls:
-    docker:
-      - image: circleci/node:8
-    working_directory: ~/repo
+    <<: *node8_image
+    <<: *working_dir
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            - v1-dependencies-
-      - run: yarn install
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+      - <<: *pull_cache
+      - <<: *install
       - run: yarn coverage:post
 
 workflows:
   version: 2
   build:
     jobs:
-      - node4
-      - node6
-      - node8
-      - lint
-      - coveralls
+      - setup
+      - node6:
+          <<: *require_setup
+      - node8:
+          <<: *require_setup
+      - node10:
+          <<: *require_setup
+      - lint:
+          <<: *require_setup
+      - coveralls:
+          <<: *require_setup
