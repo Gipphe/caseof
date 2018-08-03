@@ -229,7 +229,7 @@ yarn lint
 
 ## Compatibility
 
-This package is compatible all the way down to Node 4 and IE9. It might be
+This package is compatible all the way down to Node 6 and IE9. It might be
 compatible with older versions of Node/IE, but such guarantees cannot be made.
 
 ## Versioning

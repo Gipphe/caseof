@@ -1,3 +1,4 @@
 *.js text eol=lf
 *.md text eol=lf
 yarn.lock text eol=lf
+*.yml text eol=lf
