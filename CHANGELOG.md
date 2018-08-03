@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/Gipphe/caseof/compare/v1.1.1...v2.0.0) (2018-08-03)
+
+
+### ci
+
+* remove node 4, loosen node image versions ([802b042](https://github.com/Gipphe/caseof/commit/802b042))
+
+
+### BREAKING CHANGES
+
+* no longer officially supports Node 4.
+
+
+
 <a name="1.1.1"></a>
 ## [1.1.1](https://github.com/Gipphe/caseof/compare/v1.1.0...v1.1.1) (2018-08-02)
 
