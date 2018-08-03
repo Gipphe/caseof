@@ -1,3 +1,62 @@
+// UMD setup ripped straight from Q.js
+
+(function(definition) {
+	'use strict';
+
+	// This file will function properly as a <script> tag, or a module
+	// using CommonJS and NodeJS or RequireJS module formats. In
+	// Common/Node/RequireJS, the module exports the caseof API and when
+	// executed as a simple <script>, it creates a caseof global instead.
+
+	// Montage Require
+	if (typeof bootstrap === 'function') {
+		/* global bootstrap: false */
+		bootstrap ('promise', definition);
+
+	// CommonJS
+	} else if (typeof exports === 'object' && typeof module === 'object') {
+		module.exports = definition ();
+
+	// RequireJS
+	} else if (typeof define === 'function' && define.amd) {
+		define (definition);
+
+	// SES (Secure EcmaScript)
+	} else if (typeof ses !== 'undefined') {
+		/* global ses: true */
+		if (!ses.ok ()) {
+			return;
+		} else {
+			ses.makeCaseof = definition;
+		}
+
+	// <script>
+	} else if (typeof window !== 'undefined' || typeof self !== 'undefined') {
+		/* global window: true */
+		// Prefer window over self for add-on scripts. Use self for
+		// non-windowed contexts.
+		var global = typeof window !== 'undefined' ? window : self;
+
+		// Get the `window` object, save the previous caseof global
+		// and initialize caseof as a global.
+		var previousCaseof = global.caseof;
+		global.caseof = definition ();
+
+		// Add a noConflict function so caseof can be removed from the
+		// global namespace.
+		global.caseof.noConflict = function() {
+			global.caseof = previousCaseof;
+			return this;
+		};
+
+	} else {
+		throw new Error ('This environment was not anticipated by caseof. ' +
+			'Please file a bug.');
+	}
+
+} (function() {
+'use strict';
+
 function assertIsFunction(x, msg) {
 	if (typeof x !== 'function') {
 		throw new Error (msg);
@@ -175,4 +234,6 @@ function caseOf(specFn, x) {
 caseOf.all = caseOfAll;
 caseOf.otherwise = otherwise;
 
-module.exports = caseOf;
+return caseOf;
+
+}));
