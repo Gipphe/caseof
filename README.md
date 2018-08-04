@@ -138,19 +138,24 @@ function whatFoo(x) {
 }
 ```
 
-To me, this is rather verbose, and there are a lot of things being repeated
-in terms of statements. Keep in mind though: there is absolutely nothing
-inherently *wrong* with this kind of "if-stacking".
+Inevitably, even with monads encapsulating most of this kind of control flow
+for you, you might inevitably find yourself repeating this kind of
+"if-stacking" pattern.
+
+To me, this is rather verbose and ugly, and there are a lot of things being
+repeated in terms of statements. Keep in mind though: there is absolutely
+nothing inherently *wrong* with this kind of "if-stacking".
 
 Because of this, and because I simply adore [Elm](http://elm-lang.org/) and
-[Haskell](https://www.haskell.org/)'s `case x of` expressions, I saw it
-necessary to implement something along those lines in Javascript.
+[Haskell](https://www.haskell.org/)'s `case x of` expressions (aka simply
+"Case expressions"), I saw it necessary to implement something along those
+lines in Javascript.
 
 So, instead of the "ugly" if-stacking above, we can write
 
 ```javascript
 function whatFoo(x) {
-  caseOf((when) => {
+  return caseOf((when) => {
     when(x => x === 3)(() => 'foo')
     when(x => x > 3)(() => 'bar')
     when(x => x < 3)(() => 'foobar')
@@ -199,6 +204,31 @@ var S = require('sanctuary')
 })(3)
 'foo'
 ```
+
+Give it a little more breathing room,
+[like you might do in a language where spaces are function application](https://github.com/sanctuary-js/sanctuary/issues/438),
+and you've got yourself some easily readable code:
+
+```javascript
+var S = require ('sanctuary')
+> caseOf ((when) => {
+  when (S.equals (3))
+       (S.K ('foo'))
+
+  when (S.gt (3))
+       (S.K ('bar'))
+
+  when (S.lt (3))
+       (S.K ('foobar'))
+
+  when (S.K (true))
+       (S.K ('quack'))
+}) (3)
+'foo'
+```
+
+That is, "easily readable" if you're used to a more Haskell-like style. How
+you want to style your code is up to you.
 
 ## Contribution
 
