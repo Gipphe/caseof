@@ -81,8 +81,9 @@ Like `caseOf`, this function throws if none of the cases match.
 .  when (x => x > 3) (x => x)
 . }) (0)
 ! Error None of the cases matches the value
+```
 
-### <a name="caseOf" href="'https://github.com/Gipphe/caseof/blob/master/index.js#L188'">`caseOf :: ((a -⁠> Boolean) -⁠> (a -⁠> b) -⁠> Undefined) -⁠> a -⁠> b`</a>
+### <a name="caseOf" href="'https://github.com/Gipphe/caseof/blob/master/index.js#L189'">`caseOf :: ((a -⁠> Boolean) -⁠> (a -⁠> b) -⁠> Undefined) -⁠> a -⁠> b`</a>
 
 Returns the result of the first matching case. This function is lazy, and
 only the first matching handler is run.

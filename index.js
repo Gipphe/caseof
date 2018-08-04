@@ -172,6 +172,7 @@ function otherwise() {
 //. .  when (x => x > 3) (x => x)
 //. . }) (0)
 //. ! Error None of the cases matches the value
+//. ```
 function caseOfAll(specFn, x) {
 	assertIsNotPassedThrowWithDefaultMessage (x, 'caseOfAll');
 	assertIsFunctionWithMsg (specFn);
