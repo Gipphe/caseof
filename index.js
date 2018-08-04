@@ -185,7 +185,7 @@ function caseOfAll(specFn, x) {
 	};
 }
 
-//# caseOf :: ((a -> Boolean) -> (a -> b) -> Undefined -> a -> b
+//# caseOf :: ((a -> Boolean) -> (a -> b) -> Undefined) -> a -> b
 //.
 //. Returns the result of the first matching case. This function is lazy, and
 //. only the first matching handler is run.
