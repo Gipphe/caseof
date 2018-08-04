@@ -120,7 +120,7 @@ This function throws an error if none of the cases match.
 
 ## Motivation
 
-Having used [sanctuary](https://sanctuary.js.org/) quite a lot, I found it
+Having used [sanctuary](https://sanctuary.js.org/) quite a lot, we found it
 annoying having to repeat this kind of pattern:
 
 ```javascript
@@ -146,9 +146,9 @@ To me, this is rather verbose and ugly, and there are a lot of things being
 repeated in terms of statements. Keep in mind though: there is absolutely
 nothing inherently *wrong* with this kind of "if-stacking".
 
-Because of this, and because I simply adore [Elm](http://elm-lang.org/) and
+Because of this, and because we simply adore [Elm](http://elm-lang.org/) and
 [Haskell](https://www.haskell.org/)'s `case x of` expressions (aka simply
-"Case expressions"), I saw it necessary to implement something along those
+"Case expressions"), we saw it necessary to implement something along those
 lines in Javascript.
 
 So, instead of the "ugly" if-stacking above, we can write
@@ -261,6 +261,63 @@ yarn lint
 
 This package is compatible all the way down to Node 6 and IE9. It might be
 compatible with older versions of Node/IE, but such guarantees cannot be made.
+
+## Type checking
+
+This library features no actual type checking, other than that you call
+`caseOf` and `caseOf.all` as curried functions, as well as that `when` is
+passed actual functions as arguments.
+
+As previously mentioned in the "motivation" section, this library is heavily
+inspired by the work of [sanctuary-js](https://github.com/sanctuary-js), but
+there is one thing that is hard to integrate from their work: `sanctuary-def`
+type definitions. `caseOf` technically has a type signature of
+`caseOf :: ((a -> Boolean) -> (a -> b) -> Undefined) -> a -> b`, but this type
+signature is in practice completely impossible to enforce, even with the help
+of `sanctuary-def`. This is because the `when` function that is passed to the
+first argument of `caseOf` cannot be expected to check type signatures of each
+predicate and handler, given it only calls the handler of which the predicate
+is satisfied. Meaning this
+
+```javascript
+> let fn = caseOf ((when) => {
+.   when (x => x === 'foo') (x => x + 'bar')
+.   when (x => x > 3) (x => x - 10)
+. })
+
+> fn (14)
+4
+
+> fn ('foo')
+'foobar'
+```
+
+is perfectly valid, and will never complain, even if we utilized
+`sanctuary-def` in some way (which we didn't). This is a similar problem you
+will see with `sanctuary`'s own `ifElse`:
+
+```javascript
+> let fn = S.ifElse
+.   (x => x !== 'foo')
+.   (() => 'bar')
+.   (() => 34)
+
+> fn ('foo')
+34
+
+> fn (1)
+'bar'
+```
+
+This is valid according to its signature,
+`ifElse :: (a -> Boolean) -> (a -> b) -> (a -> b) -> a -> b`, because in each
+case, `b` isn't checked for the function that doesn't get called. For input
+`'foo'`, `b` is `String`, but the result of the `else` function isn't checked
+unless it is run (unless it is a function defined with `sanctuary-def`). And
+for the second case, where input is `'bar'`, `b` is `Number`, but the `then`
+function isn't checked.
+
+All in all, this is a limitation of runtime type checking.
 
 ## Versioning
 
