@@ -164,6 +164,14 @@ function otherwise() {
 //. . }) (-4)
 //. [-3]
 //. ```
+//.
+//. Like `caseOf`, this function throws if none of the cases match.
+//.
+//. ```javascript
+//. > caseOf.all ((when) => {
+//. .  when (x => x > 3) (x => x)
+//. . }) (0)
+//. ! Error None of the cases matches the value
 function caseOfAll(specFn, x) {
 	assertIsNotPassedThrowWithDefaultMessage (x, 'caseOfAll');
 	assertIsFunctionWithMsg (specFn);
