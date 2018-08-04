@@ -35,7 +35,7 @@ npm install --save caseof
 
 <!--transcribe-->
 
-### <a name="otherwise" href="'https://github.com/Gipphe/caseof/blob/master/index.js#L65'">`otherwise :: a -⁠> Boolean`</a>
+### <a name="otherwise" href="'https://github.com/Gipphe/caseof/blob/master/index.js#L126'">`otherwise :: a -⁠> Boolean`</a>
 
 Simply a function that always returns true. Will always be considered a
 "match", and its handler will always be executed if it is encountered.
@@ -55,7 +55,7 @@ true
 0
 ```
 
-### <a name="caseOfAll" href="'https://github.com/Gipphe/caseof/blob/master/index.js#L88'">`caseOfAll :: ((a -⁠> Boolean) -⁠> (a -⁠> b) -⁠> Undefined) -⁠> a -⁠> Array b`</a>
+### <a name="caseOfAll" href="'https://github.com/Gipphe/caseof/blob/master/index.js#L149'">`caseOfAll :: ((a -⁠> Boolean) -⁠> (a -⁠> b) -⁠> Undefined) -⁠> a -⁠> Array b`</a>
 
 Returns the result of all matching cases' handlers. The order will be
 the same order as the specification handler was called.
@@ -74,7 +74,15 @@ the same order as the specification handler was called.
 [-3]
 ```
 
-### <a name="caseOf" href="'https://github.com/Gipphe/caseof/blob/master/index.js#L119'">`caseOf :: ((a -⁠> Boolean) -⁠> (a -⁠> b) -⁠> Undefined -⁠> a -⁠> b`</a>
+Like `caseOf`, this function throws if none of the cases match.
+
+```javascript
+> caseOf.all ((when) => {
+.  when (x => x > 3) (x => x)
+. }) (0)
+! Error None of the cases matches the value
+
+### <a name="caseOf" href="'https://github.com/Gipphe/caseof/blob/master/index.js#L188'">`caseOf :: ((a -⁠> Boolean) -⁠> (a -⁠> b) -⁠> Undefined) -⁠> a -⁠> b`</a>
 
 Returns the result of the first matching case. This function is lazy, and
 only the first matching handler is run.
