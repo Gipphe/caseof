@@ -38,16 +38,15 @@ test ('function on a pure side-effect basis', (t) => {
 	t.is (res, 'foo');
 });
 
-test ('throws when specification handler is passed more than 1 argument as a time', (t) => {
+test ('throws when `when` is passed more than 1 argument as a time', (t) => {
 	const fn = () => caseof ((when) => {
 		when (() => {}, () => {});
 	}) ();
 	const err = t.throws (fn, Error);
-	t.is (err.message, 'the specification handler: the specification handler ' +
+	t.is (err.message, 'when: when ' +
 		'is a curried function, and as such only takes one argument. ' +
-		'Received two. The proper way to call the specification ' +
-		'handler: "fn (x) (y)", instead of ' +
-		'"fn (x, y)"');
+		'Received two. The proper way to call when: "fn (x) (y)", instead ' +
+		'of "fn (x, y)"');
 });
 
 test ('caseOf.all returns all results', (t) => {
