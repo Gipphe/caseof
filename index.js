@@ -65,11 +65,11 @@ function assertIsFunction(x, msg) {
 	}
 }
 
-function assertIsFunctionWithMsg(x) {
+function assertIsFunctionAndExplain(x) {
 	assertIsFunction (x, 'First argument must be a function');
 }
 
-function assertIsNotPassedThrowWithDefaultMessage(x, name) {
+function assertWasCalledWithOneParameterAndExplain(x, name) {
 	if (typeof x !== 'undefined') {
 		throw new Error (name + ': ' + name + ' is a curried ' +
 			'function, and as such only takes one argument. ' +
@@ -88,7 +88,7 @@ function assertMatchesNotEmpty(x) {
 function when(matches) {
 	return function(value) {
 		return function(pred, x) {
-			assertIsNotPassedThrowWithDefaultMessage
+			assertWasCalledWithOneParameterAndExplain
 				(x, 'the specification handler');
 			assertIsFunction (pred, 'when: predicate must be a function');
 			return function(handler) {
@@ -105,7 +105,7 @@ function lazyWhen(continuationFn) {
 	return function(matches) {
 		return function(value) {
 			return function(pred, x) {
-				assertIsNotPassedThrowWithDefaultMessage
+				assertWasCalledWithOneParameterAndExplain
 					(x, 'the specification handler');
 				assertIsFunction (pred, 'when: predicate must be a function');
 				return function(handler) {
@@ -174,8 +174,8 @@ function otherwise() {
 //. ! Error None of the cases matches the value
 //. ```
 function caseOfAll(specFn, x) {
-	assertIsNotPassedThrowWithDefaultMessage (x, 'caseOfAll');
-	assertIsFunctionWithMsg (specFn);
+	assertWasCalledWithOneParameterAndExplain (x, 'caseOfAll');
+	assertIsFunctionAndExplain (specFn);
 
 	return function(value) {
 		var matches = [];
@@ -229,8 +229,8 @@ function caseOfAll(specFn, x) {
 //. ```
 function caseOf(specFn, x) {
 	'use strict';
-	assertIsNotPassedThrowWithDefaultMessage (x, 'caseOf');
-	assertIsFunctionWithMsg (specFn);
+	assertWasCalledWithOneParameterAndExplain (x, 'caseOf');
+	assertIsFunctionAndExplain (specFn);
 	return function(value) {
 		var matches = [];
 		var boundWhen = lazyWhen
