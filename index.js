@@ -89,7 +89,7 @@ function when(matches) {
 	return function(value) {
 		return function(pred, x) {
 			assertWasCalledWithOneParameterAndExplain
-				(x, 'the specification handler');
+				(x, 'when');
 			assertIsFunction (pred, 'when: predicate must be a function');
 			return function(handler) {
 				assertIsFunction (handler, 'when: handler must be a function');
@@ -106,7 +106,7 @@ function lazyWhen(continuationFn) {
 		return function(value) {
 			return function(pred, x) {
 				assertWasCalledWithOneParameterAndExplain
-					(x, 'the specification handler');
+					(x, 'when');
 				assertIsFunction (pred, 'when: predicate must be a function');
 				return function(handler) {
 					assertIsFunction
@@ -149,7 +149,7 @@ function otherwise() {
 //# caseOfAll :: ((a -> Boolean) -> (a -> b) -> Undefined) -> a -> Array b
 //.
 //. Returns the result of all matching cases' handlers. The order will be
-//. the same order as the specification handler was called.
+//. the same order as `when` was called.
 //.
 //. ```javascript
 //. > caseOf.all ((when) => {

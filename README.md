@@ -58,7 +58,7 @@ true
 ### <a name="caseOfAll" href="'https://github.com/Gipphe/caseof/blob/master/index.js#L149'">`caseOfAll :: ((a -⁠> Boolean) -⁠> (a -⁠> b) -⁠> Undefined) -⁠> a -⁠> Array b`</a>
 
 Returns the result of all matching cases' handlers. The order will be
-the same order as the specification handler was called.
+the same order as `when` was called.
 
 ```javascript
 > caseOf.all ((when) => {
