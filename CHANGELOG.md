@@ -1,6 +1,18 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [3.0.0](https://github.com/Gipphe/caseof/compare/v2.2.3...v3.0.0) (2019-07-09)
+
+
+* remove Node 6 ([15f6f25](https://github.com/Gipphe/caseof/commit/15f6f25))
+
+
+### BREAKING CHANGES
+
+* remove support for Node 6
+
+
 
 <a name="2.2.3"></a>
 ## [2.2.3](https://github.com/Gipphe/caseof/compare/v2.2.2...v2.2.3) (2019-07-08)
