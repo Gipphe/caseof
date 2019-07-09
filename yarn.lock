@@ -3547,9 +3547,10 @@ safe-buffer@^5.0.1, safe-buffer@^5.1.1, safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/safer-buffer/-/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
 
-sanctuary-style@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/sanctuary-style/-/sanctuary-style-2.0.0.tgz#83d023a340641bcc1d27acee013c098b12075586"
+sanctuary-style@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/sanctuary-style/-/sanctuary-style-3.0.0.tgz#c39a7c925b24190aa00f5698557d2505b18db35a"
+  integrity sha512-99fUdz2MKE7GnxqrOFgBWM0rzdf2YUAhFAaOQb4FUatvHSXX13syIUOiMF0jeAMt26w2wrZGvzlF62EQh1273w==
 
 semver-diff@^2.0.0:
   version "2.1.0"
