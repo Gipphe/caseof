@@ -4090,9 +4090,10 @@ tough-cookie@~2.3.3:
   dependencies:
     punycode "^1.4.1"
 
-transcribe@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/transcribe/-/transcribe-1.1.1.tgz#f4135507e7386e505efd0a1d4724a5925bc81e76"
+transcribe@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/transcribe/-/transcribe-1.1.2.tgz#e8efb30af16d97610e2f96cb21e8d8bc5bbb8073"
+  integrity sha512-5SMhEZHxin6tOvqkVy72OeDRaMbaQb6rT5rQL6dxwjZr8J8q45iaJBR0hMdhHVeEL7cmbKcKa6oT8BCToFelow==
   dependencies:
     commander "2.8.x"
     ramda "0.19.x"
