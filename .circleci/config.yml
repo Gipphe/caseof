@@ -49,6 +49,11 @@ commands:
           node: << parameters.node >>
 
 executors:
+  node12:
+    docker:
+      - image: circleci/node:12.4
+    working_directory: ~/repo
+
   node10:
     docker:
       - image: circleci/node:10.16
@@ -60,6 +65,14 @@ executors:
     working_directory: ~/repo
 
 jobs:
+  test_node12:
+    executor: node12
+    steps:
+      - checkout
+      - setup_deps:
+          node: 12
+      - run_test
+
   test_node10:
     executor: node10
     steps:
