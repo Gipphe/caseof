@@ -1,75 +1,17 @@
-// UMD setup ripped straight from Q.js
-
-(function(definition) {
-	'use strict';
-
-	// This file will function properly as a <script> tag, or a module
-	// using CommonJS and NodeJS or RequireJS module formats. In
-	// Common/Node/RequireJS, the module exports the caseof API and when
-	// executed as a simple <script>, it creates a caseof global instead.
-
-	/* istanbul ignore next */
-
-	// Montage Require
-	if (typeof bootstrap === 'function') {
-		/* global bootstrap: false */
-		bootstrap ('promise', definition);
-
-	// CommonJS
-	} else if (typeof exports === 'object' && typeof module === 'object') {
-		module.exports = definition ();
-
-	// RequireJS
-	} else if (typeof define === 'function' && define.amd) {
-		define (definition);
-
-	// SES (Secure EcmaScript)
-	} else if (typeof ses !== 'undefined') {
-		/* global ses: true */
-		if (!ses.ok ()) {
-			return;
-		} else {
-			ses.makeCaseof = definition;
-		}
-
-	// <script>
-	} else if (typeof window !== 'undefined' || typeof self !== 'undefined') {
-		/* global window: true */
-		// Prefer window over self for add-on scripts. Use self for
-		// non-windowed contexts.
-		var global = typeof window !== 'undefined' ? window : self;
-
-		// Get the `window` object, save the previous caseof global
-		// and initialize caseof as a global.
-		var previousCaseof = global.caseof;
-		global.caseof = definition ();
-
-		// Add a noConflict function so caseof can be removed from the
-		// global namespace.
-		global.caseof.noConflict = function() {
-			global.caseof = previousCaseof;
-			return this;
-		};
-
-	} else {
-		throw new Error ('This environment was not anticipated by caseof. ' +
-			'Please file a bug.');
-	}
-
-} (function() {
-'use strict';
-
-function assertIsFunction(x, msg) {
+//    assertIsFunction :: a -> String -> Undefined!
+const assertIsFunction = x => msg => {
 	if (typeof x !== 'function') {
 		throw new Error (msg);
 	}
-}
+};
 
-function assertIsFunctionAndExplain(x) {
-	assertIsFunction (x, 'First argument must be a function');
-}
+//    assertIsFunctionAndExplain :: a -> Undefined!
+const assertIsFunctionAndExplain = x => {
+	assertIsFunction (x) ('First argument must be a function');
+};
 
-function assertWasCalledWithOneParameterAndExplain(x, name) {
+//    assertWasCalledWithOneParameterAndExplain :: a -> String -> Undefined!
+const assertWasCalledWithOneParameterAndExplain = x => name => {
 	if (typeof x !== 'undefined') {
 		throw new Error (name + ': ' + name + ' is a curried ' +
 			'function, and as such only takes one argument. ' +
@@ -77,51 +19,41 @@ function assertWasCalledWithOneParameterAndExplain(x, name) {
 			'"fn (x) (y)", instead of ' +
 			'"fn (x, y)"');
 	}
-}
+};
 
-function assertMatchesNotEmpty(x) {
+//    assertMatchesNotEmpty :: [a] -> Undefined!
+const assertMatchesNotEmpty = x => {
 	if (x.length === 0) {
 		throw new Error ('None of the cases matches the value');
 	}
-}
+};
 
-function when(matches) {
-	return function(value) {
-		return function(pred, x) {
-			assertWasCalledWithOneParameterAndExplain
-				(x, 'when');
-			assertIsFunction (pred, 'when: predicate must be a function');
-			return function(handler) {
-				assertIsFunction (handler, 'when: handler must be a function');
-				if (pred (value)) {
-					matches.push (handler (value));
-				}
-			};
-		};
+//    when :: [a] -> a -> (a -> Bool) -> (a -> b) -> Undefined!
+const when = matches => value => (pred, x) => {
+	assertWasCalledWithOneParameterAndExplain (x) ('when');
+	assertIsFunction (pred) ('when: predicate must be a function');
+	return handler => {
+		assertIsFunction (handler) ('when: handler must be a function');
+		if (pred (value)) {
+			matches.push (handler (value));
+		}
 	};
-}
+};
 
-function lazyWhen(continuationFn) {
-	return function(matches) {
-		return function(value) {
-			return function(pred, x) {
-				assertWasCalledWithOneParameterAndExplain
-					(x, 'when');
-				assertIsFunction (pred, 'when: predicate must be a function');
-				return function(handler) {
-					assertIsFunction
-						(handler, 'when: handler must be a function');
-					if (!continuationFn (matches)) {
-						return;
-					}
-					if (pred (value)) {
-						matches.push (handler (value));
-					}
-				};
-			};
-		};
+//    lazyWhen :: ([a] -> Bool) -> [a] -> a -> (a -> Bool) -> Undefined!
+const lazyWhen = continuationFn => matches => value => (pred, x) => {
+	assertWasCalledWithOneParameterAndExplain (x) ('when');
+	assertIsFunction (pred) ('when: predicate must be a function');
+	return handler => {
+		assertIsFunction (handler) ('when: handler must be a function');
+		if (!continuationFn (matches)) {
+			return;
+		}
+		if (pred (value)) {
+			matches.push (handler (value));
+		}
 	};
-}
+};
 
 //# otherwise :: a -> Boolean
 //.
@@ -142,9 +74,7 @@ function lazyWhen(continuationFn) {
 //. . }) (23)
 //. 0
 //. ```
-function otherwise() {
-	return true;
-}
+const otherwise = () => true;
 
 //# caseOfAll :: ((a -> Boolean) -> (a -> b) -> Undefined) -> a -> Array b
 //.
@@ -173,23 +103,23 @@ function otherwise() {
 //. . }) (0)
 //. ! Error None of the cases matches the value
 //. ```
-function caseOfAll(specFn, x) {
-	assertWasCalledWithOneParameterAndExplain (x, 'caseOfAll');
+const caseOfAll = (specFn, x) => {
+	assertWasCalledWithOneParameterAndExplain (x) ('caseOfAll');
 	assertIsFunctionAndExplain (specFn);
 
-	return function(value) {
-		var matches = [];
-		var boundWhen = when (matches) (value);
+	return value => {
+		const matches = [];
+		const boundWhen = when (matches) (value);
 		specFn (boundWhen);
 		assertMatchesNotEmpty (matches);
 		return matches;
 	};
-}
+};
 
 //# caseOf :: ((a -> Boolean) -> (a -> b) -> Undefined) -> a -> b
 //.
-//. Returns the result of the first matching case. This function is lazy, and
-//. only the first matching handler is run.
+//. Returns the result of the first matching case. This function is lazy,
+//. and only the first matching handler is run.
 //.
 //. ```javascript
 //. > caseOf ((when) => {
@@ -227,24 +157,18 @@ function caseOfAll(specFn, x) {
 //. . }) ('quack')
 //. ! Error: None of the cases matches the value
 //. ```
-function caseOf(specFn, x) {
-	'use strict';
-	assertWasCalledWithOneParameterAndExplain (x, 'caseOf');
+const caseOf = (specFn, x) => {
+	assertWasCalledWithOneParameterAndExplain (x) ('caseOf');
 	assertIsFunctionAndExplain (specFn);
-	return function(value) {
-		var matches = [];
-		var boundWhen = lazyWhen
-			(function(m) { return m.length === 0; })
-			(matches)
-			(value);
+	return value => {
+		const matches = [];
+		const boundWhen = lazyWhen (m => m.length === 0) (matches) (value);
 		specFn (boundWhen);
 		assertMatchesNotEmpty (matches);
 		return matches[0];
 	};
-}
+};
 caseOf.all = caseOfAll;
 caseOf.otherwise = otherwise;
 
-return caseOf;
-
-}));
+module.exports = caseOf;

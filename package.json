@@ -31,11 +31,11 @@
     "release": "yarn lint && yarn test && yarn standard-version"
   },
   "devDependencies": {
+    "@gipphe/eslint-config-haskellish": "^0.1.3",
     "ava": "^2.2.0",
     "coveralls": "^3.0.2",
     "eslint": "5.16.0",
     "nyc": "^14.1.1",
-    "sanctuary-style": "^3.0.0",
     "standard-version": "^6.0.1",
     "transcribe": "^1.1.2"
   },
