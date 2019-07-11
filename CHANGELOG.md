@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [4.0.0](https://github.com/Gipphe/caseof/compare/v3.0.0...v4.0.0) (2019-07-11)
+
+
+### style
+
+* use es6 ([3b05785](https://github.com/Gipphe/caseof/commit/3b05785))
+
+
+### BREAKING CHANGES
+
+* requires either transpilation for older environments
+and browsers, or requires you to stick to newer browsers and NodeJS
+versions.
+
+
+
 ## [3.0.0](https://github.com/Gipphe/caseof/compare/v2.2.3...v3.0.0) (2019-07-09)
 
 

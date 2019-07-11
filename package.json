@@ -10,7 +10,7 @@
     "case-expression",
     "case-of"
   ],
-  "version": "3.0.0",
+  "version": "4.0.0",
   "license": "MIT",
   "author": "Victor Nascimento Bakke",
   "main": "index.js",
