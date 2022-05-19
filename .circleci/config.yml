@@ -11,8 +11,9 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - v1-dependencies-node<< parameters.node >>-{{ checksum "package.json" }}
+            - v1-dependencies-node<< parameters.node >>-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
             # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-node<< parameters.node >>-{{ checksum "package.json" }}
             - v1-dependencies-node<< parameters.node >>
 
   save_deps:
@@ -23,19 +24,19 @@ commands:
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-node<< parameters.node >>-{{ checksum "package.json" }}
+          key: v1-dependencies-node<< parameters.node >>-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
 
   install_deps:
     steps:
-      - run: yarn install --frozen-lockfile
+      - run: npm ci
 
   run_test:
     steps:
-      - run: yarn test
+      - run: npm run test
 
   run_lint:
     steps:
-      - run: yarn lint
+      - run: npm run lint
 
   setup_deps:
     parameters:
@@ -49,22 +50,38 @@ commands:
           node: << parameters.node >>
 
 executors:
+  node16:
+    docker:
+      - image: circleci/node:16.13
+    working_directory: ~/repo
+
+  node14:
+    docker:
+      - image: circleci/node:14.18
+    working_directory: ~/repo
+
   node12:
     docker:
-      - image: circleci/node:12.4
-    working_directory: ~/repo
-
-  node10:
-    docker:
-      - image: circleci/node:10.16
-    working_directory: ~/repo
-
-  node8:
-    docker:
-      - image: circleci/node:8.10
+      - image: circleci/node:12.22
     working_directory: ~/repo
 
 jobs:
+  test_node16:
+    executor: node16
+    steps:
+      - checkout
+      - setup_deps:
+          node: 16
+      - run_test
+
+  test_node14:
+    executor: node14
+    steps:
+      - checkout
+      - setup_deps:
+          node: 14
+      - run_test
+
   test_node12:
     executor: node12
     steps:
@@ -73,44 +90,28 @@ jobs:
           node: 12
       - run_test
 
-  test_node10:
-    executor: node10
-    steps:
-      - checkout
-      - setup_deps:
-          node: 10
-      - run_test
-
-  test_node8:
-    executor: node8
-    steps:
-      - checkout
-      - setup_deps:
-          node: 8
-      - run_test
-
   lint:
-    executor: node10
+    executor: node16
     steps:
       - checkout
       - setup_deps:
-          node: 10
+          node: 16
       - run_lint
 
   coveralls:
-    executor: node8
+    executor: node16
     steps:
       - checkout
       - setup_deps:
-          node: 8
-      - run: yarn coverage:post
+          node: 16
+      - run: npm run coverage:post
 
 workflows:
   version: 2
   build:
     jobs:
+      - test_node16
+      - test_node14
       - test_node12
-      - test_node10
-      - test_node8
       - lint
       - coveralls

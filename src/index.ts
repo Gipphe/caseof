@@ -1,59 +1,26 @@
-//    assertIsFunction :: a -> String -> Undefined!
-const assertIsFunction = x => msg => {
-	if (typeof x !== 'function') {
-		throw new Error (msg);
-	}
-};
-
-//    assertIsFunctionAndExplain :: a -> Undefined!
-const assertIsFunctionAndExplain = x => {
-	assertIsFunction (x) ('First argument must be a function');
-};
-
-//    assertWasCalledWithOneParameterAndExplain :: a -> String -> Undefined!
-const assertWasCalledWithOneParameterAndExplain = x => name => {
-	if (typeof x !== 'undefined') {
-		throw new Error (name + ': ' + name + ' is a curried ' +
-			'function, and as such only takes one argument. ' +
-			'Received two. The proper way to call ' + name + ': ' +
-			'"fn (x) (y)", instead of ' +
-			'"fn (x, y)"');
-	}
-};
-
-//    assertMatchesNotEmpty :: [a] -> Undefined!
-const assertMatchesNotEmpty = x => {
+const assertMatchesNotEmpty = (x: unknown[]) => {
 	if (x.length === 0) {
-		throw new Error ('None of the cases matches the value');
+		throw new Error("None of the cases matches the value");
 	}
 };
 
-//    when :: [a] -> a -> (a -> Bool) -> (a -> b) -> Undefined!
-const when = matches => value => (pred, x) => {
-	assertWasCalledWithOneParameterAndExplain (x) ('when');
-	assertIsFunction (pred) ('when: predicate must be a function');
-	return handler => {
-		assertIsFunction (handler) ('when: handler must be a function');
-		if (pred (value)) {
-			matches.push (handler (value));
-		}
-	};
-};
+export type Pred<A> = (x: A) => boolean;
+export type When<A, B> = (pred: Pred<A>) => (f: (x: A) => B) => void;
+export type SpecFn<A, B> = (when: When<A, B>) => void;
 
-//    lazyWhen :: ([a] -> Bool) -> [a] -> a -> (a -> Bool) -> Undefined!
-const lazyWhen = continuationFn => matches => value => (pred, x) => {
-	assertWasCalledWithOneParameterAndExplain (x) ('when');
-	assertIsFunction (pred) ('when: predicate must be a function');
-	return handler => {
-		assertIsFunction (handler) ('when: handler must be a function');
-		if (!continuationFn (matches)) {
+const mkWhen =
+	<A, B>(shouldContinue: Pred<B[]>) =>
+	(matches: B[]) =>
+	(value: A): When<A, B> =>
+	(pred: Pred<A>) =>
+	(f: (x: A) => B) => {
+		if (!shouldContinue(matches)) {
 			return;
 		}
-		if (pred (value)) {
-			matches.push (handler (value));
+		if (pred(value)) {
+			matches.push(f(value));
 		}
 	};
-};
 
 //# otherwise :: a -> Boolean
 //.
@@ -103,18 +70,15 @@ const otherwise = () => true;
 //. . }) (0)
 //. ! Error None of the cases matches the value
 //. ```
-const caseOfAll = (specFn, x) => {
-	assertWasCalledWithOneParameterAndExplain (x) ('caseOfAll');
-	assertIsFunctionAndExplain (specFn);
-
-	return value => {
-		const matches = [];
-		const boundWhen = when (matches) (value);
-		specFn (boundWhen);
-		assertMatchesNotEmpty (matches);
+const caseOfAll =
+	<A, B = A>(specFn: SpecFn<A, B>) =>
+	(initialVal: A): B[] => {
+		const matches: B[] = [];
+		const boundWhen = mkWhen<A, B>(() => true)(matches)(initialVal);
+		specFn(boundWhen);
+		assertMatchesNotEmpty(matches);
 		return matches;
 	};
-};
 
 //# caseOf :: ((a -> Boolean) -> (a -> b) -> Undefined) -> a -> b
 //.
@@ -157,18 +121,17 @@ const caseOfAll = (specFn, x) => {
 //. . }) ('quack')
 //. ! Error: None of the cases matches the value
 //. ```
-const caseOf = (specFn, x) => {
-	assertWasCalledWithOneParameterAndExplain (x) ('caseOf');
-	assertIsFunctionAndExplain (specFn);
-	return value => {
-		const matches = [];
-		const boundWhen = lazyWhen (m => m.length === 0) (matches) (value);
-		specFn (boundWhen);
-		assertMatchesNotEmpty (matches);
+const caseOf =
+	<A, B = A>(specFn: SpecFn<A, B>) =>
+	(initialVal: A): B => {
+		const matches: B[] = [];
+		const boundWhen = mkWhen<A, B>((xs) => xs.length === 0)(matches)(
+			initialVal
+		);
+		specFn(boundWhen);
+		assertMatchesNotEmpty(matches);
 		return matches[0];
 	};
-};
-caseOf.all = caseOfAll;
-caseOf.otherwise = otherwise;
 
-module.exports = caseOf;
+export default caseOf;
+export { caseOfAll as all, otherwise, caseOf };
