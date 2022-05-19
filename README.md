@@ -10,16 +10,16 @@
 
 A tiny package imitating a case-of expression from languages like Elm and Haskell.
 
-* [Getting Started](#getting-started)
-  * [Installing](#installing)
-  * [Usage](#usage)
-* [Motivation](#motivation)
-* [Contribution](#contribution)
-* [Compatibility](#compatibility)
-* [Changelog](#changelog)
-* [Versioning](#versioning)
-* [License](#license)
-* [Further reading](#further-reading)
+- [Getting Started](#getting-started)
+  - [Installing](#installing)
+  - [Usage](#usage)
+- [Motivation](#motivation)
+- [Contribution](#contribution)
+- [Compatibility](#compatibility)
+- [Changelog](#changelog)
+- [Versioning](#versioning)
+- [License](#license)
+- [Further reading](#further-reading)
 
 ## Getting started
 
@@ -35,7 +35,7 @@ npm install --save caseof
 
 <!--transcribe-->
 
-### <a name="otherwise" href="'https://github.com/Gipphe/caseof/blob/master/index.js#L126'">`otherwise :: a -⁠> Boolean`</a>
+### <a name="otherwise" href="https://github.com/Gipphe/caseof/blob/master/index.ts#L21">`otherwise :: a -⁠> Boolean`</a>
 
 Simply a function that always returns true. Will always be considered a
 "match", and its handler will always be executed if it is encountered.
@@ -55,7 +55,7 @@ true
 0
 ```
 
-### <a name="caseOfAll" href="'https://github.com/Gipphe/caseof/blob/master/index.js#L149'">`caseOfAll :: ((a -⁠> Boolean) -⁠> (a -⁠> b) -⁠> Undefined) -⁠> a -⁠> Array b`</a>
+### <a name="caseOfAll" href="https://github.com/Gipphe/caseof/blob/master/index.ts#L42">`caseOfAll :: ((a -⁠> Boolean) -⁠> (a -⁠> b) -⁠> Undefined) -⁠> a -⁠> Array b`</a>
 
 Returns the result of all matching cases' handlers. The order will be
 the same order as `when` was called.
@@ -83,10 +83,10 @@ Like `caseOf`, this function throws if none of the cases match.
 ! Error None of the cases matches the value
 ```
 
-### <a name="caseOf" href="'https://github.com/Gipphe/caseof/blob/master/index.js#L189'">`caseOf :: ((a -⁠> Boolean) -⁠> (a -⁠> b) -⁠> Undefined) -⁠> a -⁠> b`</a>
+### <a name="caseOf" href="https://github.com/Gipphe/caseof/blob/master/index.ts#L81">`caseOf :: ((a -⁠> Boolean) -⁠> (a -⁠> b) -⁠> Undefined) -⁠> a -⁠> b`</a>
 
-Returns the result of the first matching case. This function is lazy, and
-only the first matching handler is run.
+Returns the result of the first matching case. This function is lazy,
+and only the first matching handler is run.
 
 ```javascript
 > caseOf ((when) => {
@@ -134,16 +134,16 @@ annoying having to repeat this kind of pattern:
 
 ```javascript
 function whatFoo(x) {
-  if (x === 3) {
-    return 'foo'
-  }
-  if (x > 3) {
-    return 'bar'
-  }
-  if (x < 3) {
-    return 'foobar'
-  }
-  return 'quack'
+	if (x === 3) {
+		return "foo";
+	}
+	if (x > 3) {
+		return "bar";
+	}
+	if (x < 3) {
+		return "foobar";
+	}
+	return "quack";
 }
 ```
 
@@ -153,7 +153,7 @@ for you, you might inevitably find yourself repeating this kind of
 
 To me, this is rather verbose and ugly, and there are a lot of things being
 repeated in terms of statements. Keep in mind though: there is absolutely
-nothing inherently *wrong* with this kind of "if-stacking".
+nothing inherently _wrong_ with this kind of "if-stacking".
 
 Because of this, and because we simply adore [Elm](http://elm-lang.org/) and
 [Haskell](https://www.haskell.org/)'s `case x of` expressions (aka simply
@@ -164,12 +164,12 @@ So, instead of the "ugly" if-stacking above, we can write
 
 ```javascript
 function whatFoo(x) {
-  return caseOf((when) => {
-    when(x => x === 3)(() => 'foo')
-    when(x => x > 3)(() => 'bar')
-    when(x => x < 3)(() => 'foobar')
-    when(() => true)(() => 'quack')
-  })(x)
+	return caseOf((when) => {
+		when((x) => x === 3)(() => "foo");
+		when((x) => x > 3)(() => "bar");
+		when((x) => x < 3)(() => "foobar");
+		when(() => true)(() => "quack");
+	})(x);
 }
 ```
 
@@ -189,29 +189,29 @@ function fn(x) {
 This allows us to just asign to `whatFoo`, instead of wrapping `caseOf`:
 
 ```javascript
-var whatFoo = caseOf((when) => {
-  when(x => x === 3)(() => 'foo')
-  when(x => x > 3)(() => 'bar')
-  when(x => x < 3)(() => 'foobar')
-  when(() => true)(() => 'quack')
-})
-
-> whatFoo(3)
-'foo'
+var whatFoo =
+	caseOf((when) => {
+		when((x) => x === 3)(() => "foo");
+		when((x) => x > 3)(() => "bar");
+		when((x) => x < 3)(() => "foobar");
+		when(() => true)(() => "quack");
+	}) > whatFoo(3);
+("foo");
 ```
 
 And the predicate functions can just be references, like when you partially
 apply a function from sanctuary or ramda:
 
 ```javascript
-var S = require('sanctuary')
-> caseOf((when) => {
-  when(S.equals(3))(S.K('foo'))
-  when(S.gt(3))(S.K('bar'))
-  when(S.lt(3))(S.K('foobar'))
-  when(S.K(true))(S.K('quack'))
-})(3)
-'foo'
+var S =
+	require("sanctuary") >
+	caseOf((when) => {
+		when(S.equals(3))(S.K("foo"));
+		when(S.gt(3))(S.K("bar"));
+		when(S.lt(3))(S.K("foobar"));
+		when(S.K(true))(S.K("quack"));
+	})(3);
+("foo");
 ```
 
 Give it a little more breathing room,
@@ -219,21 +219,18 @@ Give it a little more breathing room,
 and you've got yourself some easily readable code:
 
 ```javascript
-var S = require ('sanctuary')
-> caseOf ((when) => {
-  when (S.equals (3))
-       (S.K ('foo'))
+var S =
+	require("sanctuary") >
+	caseOf((when) => {
+		when(S.equals(3))(S.K("foo"));
 
-  when (S.gt (3))
-       (S.K ('bar'))
+		when(S.gt(3))(S.K("bar"));
 
-  when (S.lt (3))
-       (S.K ('foobar'))
+		when(S.lt(3))(S.K("foobar"));
 
-  when (S.K (true))
-       (S.K ('quack'))
-}) (3)
-'foo'
+		when(S.K(true))(S.K("quack"));
+	})(3);
+("foo");
 ```
 
 That is, "easily readable" if you're used to a more Haskell-like style. How
@@ -341,5 +338,5 @@ details.
 
 ## Further reading
 
-* [Elm Case-expression example](http://elm-lang.org/examples/case)
-* [Haskell Case-expression examples](http://zvon.org/other/haskell/Outputsyntax/caseQexpressions_reference.html)
+- [Elm Case-expression example](http://elm-lang.org/examples/case)
+- [Haskell Case-expression examples](http://zvon.org/other/haskell/Outputsyntax/caseQexpressions_reference.html)
