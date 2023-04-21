@@ -3,115 +3,111 @@
 # Check https://circleci.com/docs/2.0/language-javascript/ for more details
 #
 version: 2.1
+
+orbs:
+  node: circleci/node@5.1
+  coveralls: coveralls/coveralls@2.1.1
+
 commands:
-  get_deps:
-    parameters:
-      node:
-        type: integer
-    steps:
-      - restore_cache:
-          keys:
-            - v1-dependencies-node<< parameters.node >>-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-node<< parameters.node >>-{{ checksum "package.json" }}
-            - v1-dependencies-node<< parameters.node >>
-
-  save_deps:
-    parameters:
-      node:
-        type: integer
-    steps:
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-node<< parameters.node >>-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-
-  install_deps:
-    steps:
-      - run: npm ci
-
-  run_test:
-    steps:
-      - run: npm run test
-
-  run_lint:
-    steps:
-      - run: npm run lint
-
   setup_deps:
     parameters:
       node:
-        type: integer
+        type: string
     steps:
-      - get_deps:
-          node: << parameters.node >>
-      - install_deps
-      - save_deps:
-          node: << parameters.node >>
+      - node/install:
+          node-version: << parameters.node >>
+      - run: npm ci
+
+  diff:
+    steps:
+      - run: git -c core.fileMode=false diff --exit-code
 
 executors:
-  node16:
+  base:
     docker:
-      - image: circleci/node:16.13
-    working_directory: ~/repo
-
-  node14:
-    docker:
-      - image: circleci/node:14.18
-    working_directory: ~/repo
-
-  node12:
-    docker:
-      - image: circleci/node:12.22
-    working_directory: ~/repo
+      - image: cimg/base:stable
 
 jobs:
-  test_node16:
-    executor: node16
+  build:
+    parameters:
+      node:
+        type: string
+    executor: base
     steps:
       - checkout
       - setup_deps:
-          node: 16
-      - run_test
+          node: << parameters.node >>
+      - run: npm run build
+      - diff
 
-  test_node14:
-    executor: node14
+  docs:
+    executor: base
     steps:
       - checkout
       - setup_deps:
-          node: 14
-      - run_test
+          node: "stable"
+      - run: npm run docs
+      - diff
 
-  test_node12:
-    executor: node12
+  test:
+    parameters:
+      node:
+        type: string
+    executor: base
     steps:
       - checkout
       - setup_deps:
-          node: 12
-      - run_test
+          node: << parameters.node >>
+      - run: npm run test:coverage
+      - coveralls/upload:
+          parallel: true
+          flag_name: test-<< parameters.node >>
+          verbose: true
 
   lint:
-    executor: node16
+    executor: base
     steps:
       - checkout
       - setup_deps:
-          node: 16
-      - run_lint
+          node: "stable"
+      - run: npm run lint
 
-  coveralls:
-    executor: node16
+  fmt:
+    executor: base
     steps:
       - checkout
       - setup_deps:
-          node: 16
-      - run: npm run coverage:post
+          node: "stable"
+      - run: npm run fmt:check
+
+  result:
+    executor: base
+    steps:
+      - run: echo ok
+      - coveralls/upload:
+          parallel_finished: true
+          carryforward: "test-16,test-18,test-19,test-20"
+
+node_versions: &node_versions ["16", "18", "19", "20"]
 
 workflows:
-  version: 2
-  build:
+  full:
     jobs:
-      - test_node16
-      - test_node14
-      - test_node12
+      - build:
+          matrix:
+            parameters:
+              node: *node_versions
+      - docs
+      - fmt
       - lint
-      - coveralls
+      - test:
+          matrix:
+            parameters:
+              node: *node_versions
+      - result:
+          requires:
+            - build
+            - docs
+            - fmt
+            - lint
+            - test

@@ -3,7 +3,5 @@
 	"statements": 99,
 	"functions": 99,
 	"branches": 99,
-	"exclude": [
-		"test/*.spec.js"
-	]
+	"exclude": ["test/*.spec.js"]
 }

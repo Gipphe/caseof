@@ -4,14 +4,13 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [5.0.0](https://github.com/Gipphe/caseof/compare/v4.0.0...v5.0.0) (2022-05-19)
 
-
 ### ⚠ BREAKING CHANGES
 
-* Exports as an ES module
+- Exports as an ES module
 
 ### Refactor
 
-* rewrite in Typescript ([49cd2f6](https://github.com/Gipphe/caseof/commit/49cd2f6f0453158d033522cd47eea4cbcb5ab0df))
+- rewrite in Typescript ([49cd2f6](https://github.com/Gipphe/caseof/commit/49cd2f6f0453158d033522cd47eea4cbcb5ab0df))
 
 ## [4.0.0](https://github.com/Gipphe/caseof/compare/v3.0.0...v4.0.0) (2019-07-11)
 
