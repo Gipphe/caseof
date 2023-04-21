@@ -3,6 +3,7 @@
 		"outDir": "dist",
 		"target": "ES2019",
 		"module": "CommonJS",
+		"declaration": true,
 		"strict": true,
 		"moduleResolution": "node",
 		"alwaysStrict": true,
@@ -13,6 +14,7 @@
 		"baseUrl": "."
 	},
 	"include": ["src/**/*.ts"],
+	"exclude": ["node_modules", "dist"],
 	"ts-node": {
 		"compilerOptions": {
 			"module": "CommonJS"

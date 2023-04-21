@@ -2,17 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.caseOf = exports.otherwise = exports.all = void 0;
 const assertMatchesNotEmpty = (x) => {
-	if (x.length === 0) {
-		throw new Error("None of the cases matches the value");
-	}
+    if (x.length === 0) {
+        throw new Error("None of the cases matches the value");
+    }
 };
 const mkWhen = (shouldContinue) => (matches) => (value) => (pred) => (f) => {
-	if (!shouldContinue(matches)) {
-		return;
-	}
-	if (pred(value)) {
-		matches.push(f(value));
-	}
+    if (!shouldContinue(matches)) {
+        return;
+    }
+    if (pred(value)) {
+        matches.push(f(value));
+    }
 };
 //# otherwise :: a -> Boolean
 //.
@@ -63,11 +63,11 @@ exports.otherwise = otherwise;
 //. ! Error None of the cases matches the value
 //. ```
 const caseOfAll = (specFn) => (initialVal) => {
-	const matches = [];
-	const boundWhen = mkWhen(() => true)(matches)(initialVal);
-	specFn(boundWhen);
-	assertMatchesNotEmpty(matches);
-	return matches;
+    const matches = [];
+    const boundWhen = mkWhen(() => true)(matches)(initialVal);
+    specFn(boundWhen);
+    assertMatchesNotEmpty(matches);
+    return matches;
 };
 exports.all = caseOfAll;
 //# caseOf :: ((a -> Boolean) -> (a -> b) -> Undefined) -> a -> b
@@ -112,11 +112,11 @@ exports.all = caseOfAll;
 //. ! Error: None of the cases matches the value
 //. ```
 const caseOf = (specFn) => (initialVal) => {
-	const matches = [];
-	const boundWhen = mkWhen((xs) => xs.length === 0)(matches)(initialVal);
-	specFn(boundWhen);
-	assertMatchesNotEmpty(matches);
-	return matches[0];
+    const matches = [];
+    const boundWhen = mkWhen((xs) => xs.length === 0)(matches)(initialVal);
+    specFn(boundWhen);
+    assertMatchesNotEmpty(matches);
+    return matches[0];
 };
 exports.caseOf = caseOf;
 exports.default = caseOf;
