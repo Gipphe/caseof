@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  check:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: DeterminateSystems/determinate-nix-action@d96678350ffd6a456235832eb11e1c491589b7bb
+      - uses: cachix/cachix-action@5f2d7c5294214f71b873db4b969586b980625e71
+        with:
+          name: gipphe
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+      - run: nix flake check --accept-flake-config -L
+
+  results:
+    name: Results
+    runs-on: ubuntu-latest
+    if: always()
+    needs:
+      - check
+    steps:
+      - run: |
+          result="${{ needs.check.result }}"
+          if [[ "$result" != "success" ]]; then
+            exit 1
+          fi
