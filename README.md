@@ -242,7 +242,7 @@ This package is open to pull requests. To set up the development environment,
 fork it, clone it, and run
 
 ```shell
-yarn
+npm install
 ```
 
 in the project folder. This will install all necessary dependencies.
@@ -250,7 +250,7 @@ in the project folder. This will install all necessary dependencies.
 Run the command
 
 ```shell
-yarn test
+npm run test
 ```
 
 to run unit tests.
@@ -260,13 +260,13 @@ This project uses a slightly altered variant of
 lint the project using
 
 ```shell
-yarn lint
+npm run lint
 ```
 
 ## Compatibility
 
-This package is compatible all the way down to Node 6 and IE9. It might be
-compatible with older versions of Node/IE, but such guarantees cannot be made.
+This package supports Node 24 and up. It might be compatible with older
+versions of Node, but such guarantees cannot be made.
 
 ## Type checking
 
