@@ -34,7 +34,7 @@
 		"fmt": "prettier --write .",
 		"fmt:check": "prettier --check .",
 		"test": "jest",
-		"test:coverage": "jest --coverage"
+		"test:coverage": "jest --ci --coverage"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",

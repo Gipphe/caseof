@@ -29,6 +29,26 @@
         devShells.default = pkgs.mkShell {
           packages = [ pkgs.nodejs_24 ];
         };
+
+        checks = {
+          build = self.packages.x86_64-linux.caseof;
+
+          tests = self.packages.x86_64-linux.caseof.overrideAttrs {
+            name = "npm-test";
+            installPhase = /* bash */ ''
+              rm -rf "$out"
+              npm run test:coverage && touch "$out"
+            '';
+          };
+
+          fmt = self.packages.x86_64-linux.caseof.overrideAttrs {
+            name = "npm-fmt-check";
+            installPhase = /* bash */ ''
+              rm -rf "$out"
+              npm run fmt:check && touch "$out"
+            '';
+          };
+        };
       }
     );
 }
