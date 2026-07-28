@@ -126,11 +126,11 @@ const caseOf =
 	(initialVal: A): B => {
 		const matches: B[] = [];
 		const boundWhen = mkWhen<A, B>((xs) => xs.length === 0)(matches)(
-			initialVal
+			initialVal,
 		);
 		specFn(boundWhen);
 		assertMatchesNotEmpty(matches);
-		return matches[0];
+		return matches[0]!;
 	};
 
 export default caseOf;
