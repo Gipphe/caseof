@@ -14,7 +14,7 @@ describe("caseof", () => {
 			caseof.caseOf<number>((when) => {
 				when((x) => x === 2)((x) => x + 1);
 			})(3);
-		expect(fn).toThrowError(new Error("None of the cases matches the value"));
+		expect(fn).toThrow(new Error("None of the cases matches the value"));
 	});
 
 	test("returns result of first handler", () => {
@@ -26,7 +26,6 @@ describe("caseof", () => {
 	});
 
 	test("function on a pure side-effect basis", () => {
-		// eslint-disable-next-line @typescript-eslint/no-inferrable-types
 		const foo: string = "foo";
 		const res = caseof.caseOf<void, string>((when) => {
 			when(() => foo === "bar")(() => "bar");

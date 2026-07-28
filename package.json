@@ -19,30 +19,22 @@
 		"url": "https://github.com/Gipphe/caseof.git"
 	},
 	"files": [
-		"dist/cjs/*",
-		"dist/mjs/*"
+		"dist/*"
 	],
-	"main": "dist/cjs/index.js",
-	"module": "dist/mjs/index.js",
+	"module": "dist/index.js",
 	"exports": {
 		".": {
-			"import": "./dist/mjs/index.js",
-			"require": "./dist/cjs/index.js"
+			"import": "./dist/index.js"
 		}
 	},
 	"scripts": {
-		"build": "npm run clean && npm run build:cjs && npm run build:esm && npm run build:post",
-		"build:cjs": "tsc -p tsconfig.cjs.json",
-		"build:esm": "tsc -p tsconfig.esm.json",
-		"build:post": "node fixup.js",
-		"clean": "rm -rf dist/*",
+		"build": "rm -rf dist/* && tsc",
 		"docs": "transcribe --url 'https://github.com/Gipphe/caseof/blob/master/{filename}#L{line}' --insert-into README.md -- src/index.ts",
 		"lint": "eslint --ext ts,js src test",
 		"fmt": "prettier --write .",
 		"fmt:check": "prettier --check .",
 		"test": "jest",
-		"test:coverage": "jest --coverage",
-		"release": "npm run lint && npm run test && standard-version"
+		"test:coverage": "jest --coverage"
 	},
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
@@ -54,7 +46,6 @@
 		"globals": "^17.8.0",
 		"jest": "^30.4.2",
 		"nyc": "^18.0.0",
-		"standard-version": "^9.5.0",
 		"prettier": "^3.9.6",
 		"transcribe": "^1.1.2",
 		"ts-jest": "^29.4.12",
