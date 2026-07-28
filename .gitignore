@@ -2,3 +2,5 @@
 .coveralls.yml
 /.nyc_output/
 /coverage/
+.direnv/
+result
