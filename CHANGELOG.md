@@ -1,5 +1,28 @@
 # Changelog
 
+## [6.0.0](https://github.com/Gipphe/caseof/compare/v5.0.2...v6.0.0) (2026-07-29)
+
+
+### ⚠ BREAKING CHANGES
+
+* delete old CHANGELOG to have release-please recreate it ([#53](https://github.com/Gipphe/caseof/issues/53))
+* CJS module is not longer expored. Bumped minimum supported Node version to 24.
+
+### Reverts
+
+* chore: delete old CHANGELOG to have release-please recreate it ([#50](https://github.com/Gipphe/caseof/issues/50)) ([#52](https://github.com/Gipphe/caseof/issues/52)) ([99342a5](https://github.com/Gipphe/caseof/commit/99342a5b2c273d243448e2f6e4994077c4c817f5))
+* docs!: delete old CHANGELOG to have release-please recreate it ([#53](https://github.com/Gipphe/caseof/issues/53)) ([#54](https://github.com/Gipphe/caseof/issues/54)) ([c979aee](https://github.com/Gipphe/caseof/commit/c979aee609577ff876b434076fcb5d453bba6a8e))
+
+
+### Documentation
+
+* delete old CHANGELOG to have release-please recreate it ([#53](https://github.com/Gipphe/caseof/issues/53)) ([e09ddee](https://github.com/Gipphe/caseof/commit/e09ddeecf60c22ec40cbe2689739694e317ba200))
+
+
+### Code Refactoring
+
+* expose only ESM module ([#44](https://github.com/Gipphe/caseof/issues/44)) ([664ac0d](https://github.com/Gipphe/caseof/commit/664ac0dce84ce377226e8901deb7fda7d4d331f7))
+
 ### [5.0.1](https://github.com/Gipphe/caseof/compare/v5.0.0...v5.0.1) (2023-04-21)
 
 ## [5.0.0](https://github.com/Gipphe/caseof/compare/v4.0.0...v5.0.0) (2022-05-19)
