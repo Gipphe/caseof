@@ -21,7 +21,7 @@
             pname = "caseof";
             version = (builtins.fromJSON (builtins.readFile ./package.json)).version;
             src = ./.;
-            npmDepsHash = "sha256-d2ZISACfy9rY19VY+AWi/p+DUHjz/Wf5wm7E6nWzDXI=";
+            npmDepsHash = "sha256-3mtXOC75Vu6H6Y++Tn98uw7FvUiu9IEzg0/rIHpz63U=";
           };
           default = self.packages.${system}.caseof;
         };

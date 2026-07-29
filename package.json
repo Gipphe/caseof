@@ -10,7 +10,7 @@
 		"case-expression",
 		"case-of"
 	],
-	"version": "5.0.2",
+	"version": "6.0.0",
 	"license": "MIT",
 	"author": "Victor Nascimento Bakke",
 	"homepage": "https://github.com/Gipphe/caseof",
