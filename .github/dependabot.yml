@@ -4,10 +4,14 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+      day: sunday
+      time: 04:00
   - package-ecosystem: "nix"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: sunday
+      time: 04:00
     groups:
       flake-input-updates:
         applies-to: version-updates
@@ -17,6 +21,8 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+      day: sunday
+      time: 04:00
     groups:
       npm-package-updates:
         applies-to: version-updates
