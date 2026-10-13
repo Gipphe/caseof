@@ -3,14 +3,12 @@ updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: sunday
+      interval: "monthly"
       time: 04:00
   - package-ecosystem: "nix"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: sunday
+      interval: "monthly"
       time: 04:00
     groups:
       flake-input-updates:
@@ -20,8 +18,7 @@ updates:
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
-      interval: "weekly"
-      day: sunday
+      interval: "monthly"
       time: 04:00
     groups:
       npm-package-updates:
