@@ -19,7 +19,7 @@ jobs:
           - fmt:check
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-      - uses: DeterminateSystems/determinate-nix-action@e847f25223456b3058e12f7fc9d777b6a6f25060
+      - uses: DeterminateSystems/determinate-nix-action@96c5ee93a9dddf2830d31e1da6ec719077336c28
       - uses: cachix/cachix-action@38b082610b782e7e93e209c35fd730d399dee866
         with:
           name: gipphe
